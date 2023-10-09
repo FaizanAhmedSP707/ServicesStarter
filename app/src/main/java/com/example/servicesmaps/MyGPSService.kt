@@ -13,7 +13,7 @@ class MyGPSService: Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         // Do something here, e.g. start GPS, or music playing, etc.
-
+        startGps()
 
         return START_STICKY // --> Important if you want the service to be restarted
     }
@@ -25,5 +25,13 @@ class MyGPSService: Service() {
     override fun onBind(intent: Intent?): IBinder? {
         //return null // This is temporary, but needs to be changed so that the service can be bound to the Activity
         return GPSServiceBinder(this)
+    }
+
+    fun startGps() {
+
+    }
+
+    fun stopGps() {
+
     }
 }
