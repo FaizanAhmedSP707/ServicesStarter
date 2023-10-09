@@ -39,7 +39,10 @@ class MyGPSService: Service(), LocationListener {
 
     fun startGps() {
         val mgr: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        mgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0f, this)
+        if(checkPermission == true) {
+            mgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0f, this)
+        }
+
     }
 
     fun stopGps() {
