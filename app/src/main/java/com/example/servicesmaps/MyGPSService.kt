@@ -1,10 +1,20 @@
 package com.example.servicesmaps
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
 import android.os.IBinder
+import android.widget.Toast
 
-class MyGPSService: Service() {
+class MyGPSService: Service(), LocationListener {
+
+    // Need this for storing the new location when the user's location changes
+    val latLon = LatLon()
+    var checkPermission = false
 
     // The following code is related to binding the service to the main activity
     inner class GPSServiceBinder(val GPS_Service: MyGPSService): android.os.Binder()
@@ -28,10 +38,28 @@ class MyGPSService: Service() {
     }
 
     fun startGps() {
-
+        val mgr: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        mgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0f, this)
     }
 
     fun stopGps() {
+
+    }
+
+    override fun onLocationChanged(newLoc: Location) {
+        latLon.lat = newLoc.latitude
+        latLon.lon = newLoc.longitude
+    }
+
+    override fun onProviderDisabled(provider: String) {
+        Toast.makeText(this, "Provider is disabled", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onProviderEnabled(provider: String) {
+        Toast.makeText(this, "Provider has been enabled", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
 
     }
 }
