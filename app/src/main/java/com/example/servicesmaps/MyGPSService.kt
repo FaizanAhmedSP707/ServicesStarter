@@ -21,7 +21,7 @@ class MyGPSService: Service(), LocationListener {
 
     // Start handler
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
+        checkPermission = true
         // Do something here, e.g. start GPS, or music playing, etc.
         startGps()
 
