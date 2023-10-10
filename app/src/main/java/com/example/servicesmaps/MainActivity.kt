@@ -1,9 +1,14 @@
 package com.example.servicesmaps
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -15,8 +20,17 @@ import org.osmdroid.views.MapView
 class MainActivity : AppCompatActivity() {
 
     var permissionsGranted = false
+    var service: MyGPSService? = null
 
     // Add your service as an attribute of the main activity (nullable)
+    val serviceConn = object: ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
+            service = (binder as MyGPSService.GPSServiceBinder).GPS_Service
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,5 +70,12 @@ class MainActivity : AppCompatActivity() {
 
     fun initService() {
         // Start and bind the service here...
+        val bindIntent = Intent(this, MyGPSService::class.java)
+        bindService(bindIntent, serviceConn, Context.BIND_AUTO_CREATE)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(serviceConn)
     }
 }
