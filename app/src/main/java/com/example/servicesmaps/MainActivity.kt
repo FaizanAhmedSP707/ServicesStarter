@@ -10,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -21,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     var permissionsGranted = false
     var service: MyGPSService? = null
+
+    val gpsViewModel: LocationViewModel by viewModels()
 
     // Add your service as an attribute of the main activity (nullable)
     val serviceConn = object: ServiceConnection {
