@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
+import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -47,6 +48,29 @@ class MainActivity : AppCompatActivity() {
         map1.controller?.setCenter(GeoPoint(51.05, -0.72))
         requestPermissions()
 
+        // Button handling for the buttons: This one is to start the GPS
+        findViewById<Button>(R.id.btnStartGps).setOnClickListener {
+            service?.startGps()
+        }
+
+        // This one is to query the service for location updates and update our ViewModel with the new data
+        findViewById<Button>(R.id.btnGetGps).setOnClickListener {
+            service?.latLon?.apply {
+                gpsViewModel.latlon = this
+            }
+        }
+
+        // This one is for stopping the service
+        findViewById<Button>(R.id.btnStopGps).setOnClickListener {
+            service?.stopGps()
+        }
+
+        // Applying the observer to the LiveData present in our ViewModel so that the map can be updated
+        /*
+        The second argument to the observer of the LiveData is a lambda function, so it has been
+        written outside of the parentheses.
+        */
+        gpsViewModel.liveLatLon.observe(this) {map1.controller?.setCenter(GeoPoint(it.lat, it.lon))}
     }
 
     fun requestPermissions() {
