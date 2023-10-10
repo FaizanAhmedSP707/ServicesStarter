@@ -74,6 +74,10 @@ class MainActivity : AppCompatActivity() {
 
     fun initService() {
         // Start and bind the service here...
+        val startIntent = Intent(this, MyGPSService::class.java)
+        startService(startIntent)
+
+        // This code here is for binding the service to the activity
         val bindIntent = Intent(this, MyGPSService::class.java)
         bindService(bindIntent, serviceConn, Context.BIND_AUTO_CREATE)
     }
